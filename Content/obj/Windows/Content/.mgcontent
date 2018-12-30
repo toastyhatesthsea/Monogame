@@ -4,9 +4,17 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
+    <File>C:/Users/Saena/source/repos/AnimatedSprites/AnimatedSprites/Content/../../../../../Documents/LearnXNA/LearningXNA4.0/Chapter 04/AnimatedSprites/AnimatedSprites/AnimatedSpritesContent/Images/threerings.png</File>
+    <File>C:/Users/Saena/source/repos/AnimatedSprites/AnimatedSprites/Content/../../../../../Downloads/guineapigs.png</File>
+    <File>C:/Users/Saena/source/repos/AnimatedSprites/AnimatedSprites/Content/Images/plus.png</File>
+    <File>C:/Users/Saena/source/repos/AnimatedSprites/AnimatedSprites/Content/Images/skullball.png</File>
     <File>C:/Users/Saena/source/repos/AnimatedSprites/AnimatedSprites/Content/Images/threerings.png</File>
   </SourceFiles>
   <DestFiles>
+    <File>Images/threerings.png</File>
+    <File>Images/guineapigs.png</File>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>
 </SourceFileCollection>

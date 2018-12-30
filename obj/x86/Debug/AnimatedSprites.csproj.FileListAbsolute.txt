@@ -22,3 +22,6 @@ C:\Users\Saena\source\repos\AnimatedSprites\AnimatedSprites\obj\x86\Debug\Animat
 C:\Users\Saena\source\repos\AnimatedSprites\AnimatedSprites\obj\x86\Debug\AnimatedSprites.csproj.CopyComplete
 C:\Users\Saena\source\repos\AnimatedSprites\AnimatedSprites\obj\x86\Debug\AnimatedSprites.exe
 C:\Users\Saena\source\repos\AnimatedSprites\AnimatedSprites\obj\x86\Debug\AnimatedSprites.pdb
+C:\Users\Saena\source\repos\AnimatedSprites\AnimatedSprites\bin\Windows\x86\Debug\Content\Images\plus.xnb
+C:\Users\Saena\source\repos\AnimatedSprites\AnimatedSprites\bin\Windows\x86\Debug\Content\Images\skullball.xnb
+C:\Users\Saena\source\repos\AnimatedSprites\AnimatedSprites\bin\Windows\x86\Debug\Content\Images\guineapigs.xnb

@@ -11,15 +11,24 @@ namespace AnimatedSprites
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D rings, skull;
-        Point frameSize, currentFrame, sheetSize, skullFrameSize, skullCurrentFrame, skullSheetSize;
+        Texture2D rings, skull, pig;
+        Point ringFrameSize, ringCurrentFrame, ringSheetSize, skullFrameSize, skullCurrentFrame, skullSheetSize;
+        Point pigFrameSize, pigCurrentFrame, pigSheetSize;
+        Vector2 ringsPosition, skullPosition, pigposition;
+        MouseState prevMouseState;
+        const float ringsSpeed = 6;
+        const int collisionRectOffset = 10;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            ringsPosition = new Vector2(0, 0);
+            skullPosition = new Vector2(100, 100);
+            pigposition = new Vector2(Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 2);
+
             //TargetElapsedTime = new System.TimeSpan(0, 0, 0, 0, 16);
-           
+          
         }
 
         /// <summary>
@@ -33,6 +42,15 @@ namespace AnimatedSprites
             // TODO: Add your initialization logic here
 
             base.Initialize();
+        }
+
+        protected bool Collide()
+        {
+            Rectangle ringsRect = new Rectangle((int)ringsPosition.X + collisionRectOffset,
+                (int)ringsPosition.Y + collisionRectOffset, ringFrameSize.X - collisionRectOffset * 2, ringFrameSize.Y - collisionRectOffset * 2);
+            Rectangle skullRect = new Rectangle((int)skullPosition.X + collisionRectOffset,
+                (int)skullPosition.Y + collisionRectOffset, skullFrameSize.X - collisionRectOffset * 2, skullFrameSize.Y - collisionRectOffset * 2);
+            return ringsRect.Intersects(skullRect);
         }
 
         /// <summary>
@@ -51,9 +69,14 @@ namespace AnimatedSprites
             skullSheetSize = new Point(6, 8);
 
             rings = Content.Load<Texture2D>("Images/threerings");
-            currentFrame = new Point(0, 0);
-            frameSize = new Point(rings.Width / 6, rings.Height / 8);
-            sheetSize = new Point(6, 8);
+            ringCurrentFrame = new Point(0, 0);
+            ringFrameSize = new Point(rings.Width / 6, rings.Height / 8);
+            ringSheetSize = new Point(6, 8);
+
+            pig = Content.Load<Texture2D>("Images/guineapigs");
+            pigCurrentFrame = new Point(0, 0);
+            pigFrameSize = new Point(pig.Width / 12, pig.Height / 8);
+            pigSheetSize = new Point(3, 3);
         }
 
         /// <summary>
@@ -77,13 +100,50 @@ namespace AnimatedSprites
 
             // TODO: Add your update logic here
 
-            ++currentFrame.X;
-            if (currentFrame.X >= sheetSize.X)
+            ++ringCurrentFrame.X;
+            if (ringCurrentFrame.X >= ringSheetSize.X)
             {
-                currentFrame.X = 0;
-                ++currentFrame.Y;
-                if (currentFrame.Y >= sheetSize.Y)
-                    currentFrame.Y = 0;
+                ringCurrentFrame.X = 0;
+                ++ringCurrentFrame.Y;
+                if (ringCurrentFrame.Y >= ringSheetSize.Y)
+                    ringCurrentFrame.Y = 0;
+            }
+
+            ++skullCurrentFrame.X;
+            if (skullCurrentFrame.X >= skullSheetSize.X)
+            {
+                skullCurrentFrame.X = 0;
+                ++skullCurrentFrame.Y;
+                if (skullCurrentFrame.Y >= skullSheetSize.Y)
+                {
+                    skullCurrentFrame.Y = 0;
+                }
+            }
+
+            KeyboardState keyboardState = Keyboard.GetState();
+
+            if (ringsPosition.X + ringFrameSize.X / 2 < Window.ClientBounds.Width)
+            {
+                if (keyboardState.IsKeyDown(Keys.Right))
+                    ringsPosition.X += ringsSpeed;
+            }
+            if (keyboardState.IsKeyDown(Keys.Left))
+                ringsPosition.X -= ringsSpeed;
+
+            if (keyboardState.IsKeyDown(Keys.Up))
+                ringsPosition.Y -= ringsSpeed;
+            if (keyboardState.IsKeyDown(Keys.Down))
+                ringsPosition.Y += ringsSpeed;
+
+            MouseState mouseState = Mouse.GetState();
+            if (mouseState.X != prevMouseState.X ||
+                mouseState.Y != prevMouseState.Y)
+                ringsPosition = new Vector2(mouseState.X, mouseState.Y);
+            prevMouseState = mouseState;
+
+            if (Collide())
+            {
+                Exit();
             }
 
             base.Update(gameTime);
@@ -100,11 +160,19 @@ namespace AnimatedSprites
             // TODO: Add your drawing code here
 
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
-            spriteBatch.Draw(rings, Vector2.Zero,
-                new Rectangle(currentFrame.X * frameSize.X,
-                    currentFrame.Y * frameSize.Y,
-                    frameSize.X,
-                    frameSize.Y),
+            spriteBatch.Draw(rings, ringsPosition,
+                new Rectangle(ringCurrentFrame.X * ringFrameSize.X,
+                    ringCurrentFrame.Y * ringFrameSize.Y,
+                    ringFrameSize.X,
+                    ringFrameSize.Y),
+                Color.White, 0, Vector2.Zero,
+                1, SpriteEffects.None, 1);
+            //spriteBatch.End();
+            spriteBatch.Draw(skull, skullPosition,
+                new Rectangle(skullCurrentFrame.X * skullFrameSize.X,
+                    skullCurrentFrame.Y * skullFrameSize.Y,
+                    skullFrameSize.X,
+                    skullFrameSize.Y),
                 Color.White, 0, Vector2.Zero,
                 1, SpriteEffects.None, 0);
             spriteBatch.End();
