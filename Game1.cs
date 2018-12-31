@@ -20,6 +20,7 @@ namespace AnimatedSprites
         float skullSpeed = 7;
         float pigSpeed = 4;
         const int collisionRectOffset = 10;
+        Rectangle ringsRect, skullRect, pigRect;
 
         private int timeSinceLastFrame, milliSecondsPerFrame;
 
@@ -50,13 +51,19 @@ namespace AnimatedSprites
             base.Initialize();
         }
 
-        protected bool Collide()
+        protected void Collide()
         {
-            Rectangle ringsRect = new Rectangle((int)ringsPosition.X + collisionRectOffset,
+            ringsRect = new Rectangle((int)ringsPosition.X + collisionRectOffset,
                 (int)ringsPosition.Y + collisionRectOffset, ringFrameSize.X - collisionRectOffset * 2, ringFrameSize.Y - collisionRectOffset * 2);
-            Rectangle skullRect = new Rectangle((int)skullPosition.X + collisionRectOffset,
+            skullRect = new Rectangle((int)skullPosition.X + collisionRectOffset,
                 (int)skullPosition.Y + collisionRectOffset, skullFrameSize.X - collisionRectOffset * 2, skullFrameSize.Y - collisionRectOffset * 2);
-            return ringsRect.Intersects(skullRect);
+            pigRect = new Rectangle((int)pigposition.X,
+                (int)pigposition.Y, pigFrameSize.X, pigFrameSize.Y);
+        }
+
+        protected bool checkCollision(Rectangle first, Rectangle second)
+        {
+            return first.Intersects(second);
         }
 
         /// <summary>
@@ -183,7 +190,12 @@ namespace AnimatedSprites
                 ringsPosition = new Vector2(mouseState.X, mouseState.Y);
             prevMouseState = mouseState;*/
 
-            if (Collide())
+            Collide();
+            if (checkCollision(pigRect, skullRect))
+            {
+                Exit();
+            }
+            if(checkCollision(pigRect, ringsRect))
             {
                 Exit();
             }
